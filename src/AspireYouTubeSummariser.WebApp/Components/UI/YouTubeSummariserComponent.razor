@@ -37,13 +37,7 @@
     <div class="row">
         <div class="mb-3">
             <button type="button" class="btn btn-primary" @onclick="SummariseAsync">Summarise!</button>
-            <button type="button" class="btn btn-secondary" @onclick="ClearAsync">Reset!</button>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="mb-3">
-            <div id="progressBar" hidden="@summaryCompleted"></div>
+            <button type="button" class="btn btn-secondary" @onclick="ClearAsync">Clear!</button>
         </div>
     </div>
 
@@ -60,19 +54,13 @@
     private string videoLanguageCode = "en";
     private string summaryLanguageCode = "en";
     private string summaryResult = string.Empty;
-    private bool summaryCompleted;
 
     private async Task SummariseAsync()
     {
         try
         {
-            summaryCompleted = false;
-            await JSR.InvokeVoidAsync("YouTube.RenderProgressBar");
-
             var result = await ApiApp.SummariseAsync(youTubeLinkUrl, videoLanguageCode, summaryLanguageCode);
             summaryResult = result;
-
-            summaryCompleted = true;
         }
         catch (Exception ex)
         {

@@ -31,6 +31,8 @@ builder.Services.AddScoped<YouTubeSummariserService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpClient<IApiAppClient, ApiAppClient>(p => p.BaseAddress = new Uri("http://localhost:5050"));
+
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
@@ -94,6 +96,8 @@ internal class YouTubeSummariserService(IYouTubeVideo youtube, AzureOpenAIClient
 
     public async Task<string> SummariseAsync(SummaryRequest req)
     {
+        Thread.Sleep(30000);
+
         Subtitle subtitle = await this._youtube.ExtractSubtitleAsync(req.YouTubeLinkUrl, req.VideoLanguageCode).ConfigureAwait(false);
         string caption = subtitle.Content.Select(p => p.Text).Aggregate((a, b) => $"{a}\n{b}");
 
